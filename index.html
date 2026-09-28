@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Task Manager - Sistem Terdistribusi menggunakan REST API dan Supabase">
+  <title>TaskFlow — Distributed Task Manager</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+</head>
+<body>
+
+  <!-- Toast Notifications -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <div class="app-container">
+
+    <!-- ===== HEADER ===== -->
+    <header class="app-header">
+      <span class="logo-icon">⚡</span>
+      <h1>TaskFlow</h1>
+      <p class="subtitle">Distributed Task Manager — Sistem Terdistribusi</p>
+      <div class="badge">
+        <span class="dot"></span>
+        Connected to Supabase REST API
+      </div>
+    </header>
+
+    <!-- ===== STATS ===== -->
+    <section class="stats-bar">
+      <div class="stat-item">
+        <div class="stat-number" id="statTotal">0</div>
+        <div class="stat-label">Total</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" id="statActive">0</div>
+        <div class="stat-label">Active</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" id="statCompleted">0</div>
+        <div class="stat-label">Done</div>
+      </div>
+    </section>
+
+    <!-- ===== ADD FORM ===== -->
+    <section class="add-form-container">
+      <form class="add-form" id="addForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="inputTitle">Judul Task</label>
+            <input type="text" id="inputTitle" placeholder="Apa yang perlu dikerjakan?" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="inputDesc">Deskripsi (opsional)</label>
+            <textarea id="inputDesc" placeholder="Tambahkan detail..." rows="1"></textarea>
+          </div>
+          <div class="form-group" style="max-width: 160px;">
+            <label for="inputPriority">Prioritas</label>
+            <select id="inputPriority">
+              <option value="low">🟢 Low</option>
+              <option value="medium" selected>🟡 Medium</option>
+              <option value="high">🔴 High</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <button type="submit" class="btn-add">
+            <span class="btn-icon">＋</span>
+            <span>Tambah Task</span>
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- ===== FILTER ===== -->
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">📋 Semua</button>
+      <button class="filter-btn" data-filter="active">⏳ Aktif</button>
+      <button class="filter-btn" data-filter="completed">✅ Selesai</button>
+    </div>
+
+    <!-- ===== TODO LIST ===== -->
+    <main class="todo-list" id="todoList">
+      <div class="loading-container">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Memuat data dari Supabase...</div>
+      </div>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="app-footer">
+      <p>TaskFlow — Project Sistem Terdistribusi</p>
+      <div class="tech-stack">
+        <span class="tech-tag">HTML</span>
+        <span class="tech-tag">CSS</span>
+        <span class="tech-tag">JavaScript</span>
+        <span class="tech-tag">Supabase REST API</span>
+        <span class="tech-tag">GET</span>
+        <span class="tech-tag">POST</span>
+        <span class="tech-tag">PUT</span>
+        <span class="tech-tag">DELETE</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- ===== EDIT MODAL ===== -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <h2>✏️ Edit Task</h2>
+      <form id="editForm">
+        <div class="form-group">
+          <label for="editTitle">Judul</label>
+          <input type="text" id="editTitle" required>
+        </div>
+        <div class="form-group">
+          <label for="editDesc">Deskripsi</label>
+          <textarea id="editDesc" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="editPriority">Prioritas</label>
+          <select id="editPriority">
+            <option value="low">🟢 Low</option>
+            <option value="medium">🟡 Medium</option>
+            <option value="high">🔴 High</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" id="btnCancelEdit">Batal</button>
+          <button type="submit" class="btn-save">💾 Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== API LOG PANEL ===== -->
+  <button class="api-log-toggle" id="apiLogToggle" title="API Request Log">
+    📡
+  </button>
+
+  <div class="api-log-panel" id="apiLogPanel">
+    <div class="api-log-header">
+      <h3>📡 API Request Log</h3>
+      <button class="api-log-clear" id="apiLogClear">Clear</button>
+    </div>
+    <div class="api-log-list" id="apiLogList">
+      <div class="empty-state" style="padding: 30px 10px;">
+        <p style="color: var(--text-muted); font-size: 0.8rem;">Belum ada request...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts (urutan penting!) -->
+  <script src="config.js"></script>
+  <script src="api.js"></script>
+  <script src="app.js"></script>
+
+</body>
+</html>
